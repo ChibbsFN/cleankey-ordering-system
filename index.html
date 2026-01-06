@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cleankey Ordering (Web)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="toast-root" style="position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:30;"></div>
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-mark">CK</div>
+          <div>
+            <div class="brand-text-main">Cleankey Ordering</div>
+            <div class="brand-text-sub">Internal ordering &amp; approval system</div>
+          </div>
+        </div>
+        <div class="header-meta">
+          <span class="chip">GUI in English</span>
+          <span class="dot">•</span>
+          <span class="chip">PDF products in Finnish</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2><span class="step-pill">1</span> Customer &amp; order info</h2>
+        <form id="order-meta-form">
+          <div>
+            <label>Customer name*</label>
+            <input type="text" id="customer-name" required />
+          </div>
+          <div>
+            <label>Supervisor name (optional)</label>
+            <input type="text" id="supervisor-name" />
+          </div>
+          <div style="grid-column:1/-1;">
+            <label>Note for supervisor (optional)</label>
+            <textarea id="order-note"></textarea>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="flex" style="margin-bottom: 0.5rem">
+          <h2><span class="step-pill">2</span> Add products</h2>
+          <span class="pill">
+            <span id="product-count-visible">0</span> /
+            <span id="product-count-total">0</span> products match
+          </span>
+        </div>
+
+        <div class="flex" style="margin-bottom:0.5rem;">
+          <div style="flex:1;min-width:220px;">
+            <label>Search (SKU or name)</label>
+            <input
+              type="text"
+              id="product-search"
+              placeholder="Type to filter products..."
+            />
+          </div>
+          <div style="flex:1;min-width:220px;">
+            <label>Category</label>
+            <select id="category-filter">
+              <option value="">All categories</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex" style="margin-bottom:0.5rem;">
+          <div style="flex:1;min-width:220px;">
+            <label>Product (English)</label>
+            <select id="product-select"></select>
+          </div>
+          <div>
+            <label>Quantity</label>
+            <input
+              type="number"
+              id="product-qty"
+              min="1"
+              step="1"
+              class="small-input"
+              value="1"
+            />
+          </div>
+          <div>
+            <label>Unit price (€)</label>
+            <input
+              type="number"
+              id="product-price"
+              min="0"
+              step="0.01"
+              class="small-input"
+            />
+          </div>
+          <div style="align-self:end;">
+            <button class="secondary" id="add-item-btn" type="button">
+              Add to order
+            </button>
+          </div>
+        </div>
+
+        <div id="order-items-table-wrapper"></div>
+      </section>
+
+      <section class="panel">
+        <div class="flex">
+          <h2><span class="step-pill">3</span> Generate PDF &amp; save order</h2>
+          <div>
+            <button id="download-pdf-btn" class="primary" type="button">
+              Download PDF (for WhatsApp)
+            </button>
+          </div>
+        </div>
+        <p style="font-size:0.8rem;color:#555;margin-top:0.4rem;">
+          Website is fully in English. The generated PDF uses Finnish product
+          descriptions so your supervisor can review it easily. Each order is
+          stored locally in your browser as history.
+        </p>
+      </section>
+
+      <section class="panel" id="history-panel">
+        <div class="flex">
+          <h2><span class="step-pill">4</span> Order history (this browser)</h2>
+          <div class="flex" style="gap:0.3rem;">
+            <button type="button" class="secondary" id="history-refresh-btn">
+              Refresh
+            </button>
+            <button type="button" class="secondary" id="history-export-all-btn">
+              Export all as PDF
+            </button>
+            <button type="button" class="secondary" id="history-clear-btn">
+              Clear history (this browser)
+            </button>
+          </div>
+        </div>
+        <p class="help">
+          Orders are saved in this browser only (using localStorage).
+          Use "Export all as PDF" to generate a summary for backup or sharing.
+        </p>
+        <div id="history-table-wrapper" class="history-table-wrapper"></div>
+      </section>
+
+      <section class="panel" id="admin-panel">
+        <div class="flex">
+          <h2><span class="step-pill">5</span> Admin – manage products</h2>
+          <span class="help">
+            Password-protected. After changes, download the new products.json and upload it to your server.
+          </span>
+        </div>
+
+        <div id="admin-locked">
+          <label>Admin password</label>
+          <div class="flex">
+            <input
+              type="password"
+              id="admin-password-input"
+              placeholder="Enter admin password"
+              style="max-width:200px;"
+            />
+            <button type="button" class="secondary" id="admin-unlock-btn">
+              Unlock admin
+            </button>
+          </div>
+          <p class="help">
+            Only people who know the password can add products and download an updated products.json file.
+          </p>
+        </div>
+
+        <div id="admin-content" style="display:none;margin-top:0.5rem;">
+          <form id="admin-product-form">
+            <div>
+              <label>SKU*</label>
+              <input type="text" id="admin-sku" required />
+            </div>
+            <div>
+              <label>Category*</label>
+              <input type="text" id="admin-category" placeholder="e.g. Bags, Gloves" required />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Product name (English, for website)*</label>
+              <input type="text" id="admin-name-en" required />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label>Product name (Finnish, for PDF)*</label>
+              <input type="text" id="admin-name-fi" required />
+            </div>
+            <div>
+              <label>Default price (€)</label>
+              <input type="number" id="admin-price" min="0" step="0.01" value="0" />
+            </div>
+          </form>
+          <div class="flex">
+            <button type="button" class="secondary" id="admin-add-product-btn">
+              Add product to list
+            </button>
+            <button type="button" class="primary" id="admin-download-json-btn">
+              Download updated products.json
+            </button>
+          </div>
+          <p class="help">
+            After you add products, click <strong>Download updated products.json</strong> and upload it
+            to the same folder as index.html on your web host to make the changes permanent.
+          </p>
+          <p id="admin-status" class="help"></p>
+        </div>
+      </section>
+    </main>
+
+    <!-- jsPDF + autoTable from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

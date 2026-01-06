@@ -1,0 +1,266 @@
+[
+  {
+    "id": 1,
+    "sku": "BPNG1004",
+    "nameEn": "Disposable glove Bea Pro, nitrile, blue, size L, 100 pcs",
+    "nameFi": "Kertakäyttökäsine Bea Pro, nitriili, sininen, koko L, 100kpl",
+    "category": "Gloves",
+    "price": 0
+  },
+  {
+    "id": 2,
+    "sku": "BPNG1003",
+    "nameEn": "Disposable glove Bea Pro, nitrile, blue, size M, 100 pcs",
+    "nameFi": "Kertakäyttökäsine Bea Pro, nitriili, sininen, koko M, 100kpl",
+    "category": "Gloves",
+    "price": 0
+  },
+  {
+    "id": 3,
+    "sku": "87150",
+    "nameEn": "Katrin Plus hand towel Non Stop M2, wide",
+    "nameFi": "Katrin Plus Käsipyyhe Non Stop M2, leveä",
+    "category": "Paper products",
+    "price": 0
+  },
+  {
+    "id": 4,
+    "sku": "106252",
+    "nameEn": "Katrin Gigant toilet paper roll M2",
+    "nameFi": "Katrin Gigant Wc-paperirulla M2",
+    "category": "Paper products",
+    "price": 0
+  },
+  {
+    "id": 5,
+    "sku": "101500",
+    "nameEn": "Urinal block 1 kg",
+    "nameFi": "Urinaalikapseli 1kg",
+    "category": "Washroom",
+    "price": 0
+  },
+  {
+    "id": 6,
+    "sku": "112500",
+    "nameEn": "Urinal screen, wall model",
+    "nameFi": "Pisuaari ritilä seinämalli",
+    "category": "Washroom",
+    "price": 0
+  },
+  {
+    "id": 7,
+    "sku": "1407015040",
+    "nameEn": "Dust bag Nilfisk GD930/VP930, paper, 10 pcs",
+    "nameFi": "Pölypussi Nilfisk GD930/VP930, paperi, 10kpl",
+    "category": "Machine bags",
+    "price": 0
+  },
+  {
+    "id": 8,
+    "sku": "101106550",
+    "nameEn": "Soft Care Des E hand disinfectant H5, 1L dispenser",
+    "nameFi": "Soft Care Des E Käsihuuhde H5, 1L dispenso",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 9,
+    "sku": "119102",
+    "nameEn": "Sprintus Boostix dust bag 10 pcs",
+    "nameFi": "Sprintus Boostix pölypussi 10 kpl",
+    "category": "Machine bags",
+    "price": 0
+  },
+  {
+    "id": 10,
+    "sku": "23232",
+    "nameEn": "Toilet brush with cup, white, short handle",
+    "nameFi": "WC-harja kuppi valkoinen, lyhyt varsi",
+    "category": "Accessories",
+    "price": 0
+  },
+  {
+    "id": 11,
+    "sku": "170833",
+    "nameEn": "MicroQuick cloth green 38×40 cm",
+    "nameFi": "MicronQuick vihreä 38×40 cm",
+    "category": "Cloths",
+    "price": 0
+  },
+  {
+    "id": 12,
+    "sku": "752159",
+    "nameEn": "Sun Professional All in 1 ECO, 100 tablets",
+    "nameFi": "Sun Professional All in 1 ECO 100kpl",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 13,
+    "sku": "180949",
+    "nameEn": "Fairy Original dishwashing liquid 900 ml",
+    "nameFi": "Fairy original 900ml käsitiskiaine",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 14,
+    "sku": "BBH-30-2-0F",
+    "nameEn": "Biobag 30L with handle, 500×550, 20 pcs/roll",
+    "nameFi": "Biopussi 30L sangollinen 500×550, 20kpl/rll",
+    "category": "Bags",
+    "price": 0
+  },
+  {
+    "id": 15,
+    "sku": "T7091.001",
+    "nameEn": "Kiilto Pro Biorine 1L",
+    "nameFi": "Kiilto Pro Biorine 1L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 16,
+    "sku": "MMKILTO",
+    "nameEn": "3M Stainless Steel Cleaner & Polish",
+    "nameFi": "3M Stainless steel Cleaner & Polish",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 17,
+    "sku": "30200",
+    "nameEn": "30L trash bag black, 500×700, LDPE, 50 pcs/roll",
+    "nameFi": "30L Roskapussi musta, 500×700, LDPE, 50kpl/rll",
+    "category": "Bags",
+    "price": 0
+  },
+  {
+    "id": 18,
+    "sku": "15020",
+    "nameEn": "150L garbage bag black, 750×1150, LDPE, 10 pcs/roll",
+    "nameFi": "150L jätesäkki musta, 750×1150, LDPE, 10kpl/rll",
+    "category": "Bags",
+    "price": 0
+  },
+  {
+    "id": 19,
+    "sku": "101106602",
+    "nameEn": "Soft Care Des E hand disinfectant H5 IC, 4×1.3L",
+    "nameFi": "Soft Care Des E Käsihuuhde H5 IC, 4×1.3L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 20,
+    "sku": "80380",
+    "nameEn": "Erisan Pro Soap 5L",
+    "nameFi": "Erisan Pro Soap 5L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 21,
+    "sku": "480617",
+    "nameEn": "Lotus Embo toilet paper M2",
+    "nameFi": "Lotus Embo wc-paperi M2",
+    "category": "Paper products",
+    "price": 0
+  },
+  {
+    "id": 22,
+    "sku": "30LKIRKAS500x700",
+    "nameEn": "30L trash bag clear, 500×700, LDPE, 50 pcs/roll, 20 rolls/box",
+    "nameFi": "30L Roskapussi kirkas, 500×700, LDPE, 50kpl/rll, 20rll/ltk",
+    "category": "Bags",
+    "price": 0
+  },
+  {
+    "id": 23,
+    "sku": "T7091.005",
+    "nameEn": "Kiilto Pro Biorine 5L",
+    "nameFi": "Kiilto Pro Biorine 5L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 24,
+    "sku": "41128",
+    "nameEn": "Kiilto Pro Sanitop 1L",
+    "nameFi": "Kiilto Pro Sanitop 1L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 25,
+    "sku": "41129",
+    "nameEn": "Kiilto Pro Sanitop 5L",
+    "nameFi": "Kiilto Pro Sanitop 5L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 26,
+    "sku": "T7070.001",
+    "nameEn": "Kiilto Pro Teho A100 1L",
+    "nameFi": "Kiilto Pro Teho A100 1L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 27,
+    "sku": "T7070.005",
+    "nameEn": "Kiilto Pro Teho A100 5L",
+    "nameFi": "Kiilto Pro Teho A100 5L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 28,
+    "sku": "41039",
+    "nameEn": "Kiilto Pro Teho A100 käyttöliuosetiketti",
+    "nameFi": "Kiilto Pro Teho A100 käyttöliuosetiketti",
+    "category": "Accessories",
+    "price": 0
+  },
+  {
+    "id": 29,
+    "sku": "T7504.001",
+    "nameEn": "Kiilto Pro Vieno 1L",
+    "nameFi": "Kiilto Pro Vieno 1L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 30,
+    "sku": "T7504.005",
+    "nameEn": "Kiilto Pro Vieno 5L",
+    "nameFi": "Kiilto Pro Vieno 5L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 31,
+    "sku": "41080",
+    "nameEn": "Kiilto Pro Vieno hajusteeton 1L",
+    "nameFi": "Kiilto Pro Vieno hajusteeton 1L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 32,
+    "sku": "41081",
+    "nameEn": "Kiilto Pro Vieno hajusteeton 5L",
+    "nameFi": "Kiilto Pro Vieno hajusteeton 5L",
+    "category": "Chemicals",
+    "price": 0
+  },
+  {
+    "id": 33,
+    "sku": "63360",
+    "nameEn": "Kiilto Pro Vieno Evo hajusteeton 2x1,5L",
+    "nameFi": "Kiilto Pro Vieno Evo hajusteeton 2x1,5L",
+    "category": "Chemicals",
+    "price": 0
+  }
+]
