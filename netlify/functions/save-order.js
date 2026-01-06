@@ -1,7 +1,15 @@
-// Netlify Function: save-order
-// Persists a single order into a Postgres table "orders" with columns:
-// id (serial/bigserial), created_at timestamptz default now(), payload jsonb.
-const { Client } = require("pg");
+// Netlify Function: save-order (Netlify Blobs version)
+// Stores each order in a Netlify Blobs store called "order-history".
+// The data model is a single JSON array under key "orders".
+const { getStore } = require("@netlify/blobs");
+const crypto = require("crypto");
+
+function generateId() {
+  if (crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -11,47 +19,43 @@ exports.handler = async (event) => {
   let order;
   try {
     order = JSON.parse(event.body || "{}");
-  } catch (e) {
+  } catch (_e) {
     return { statusCode: 400, body: "Invalid JSON" };
   }
 
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
-    console.warn("DATABASE_URL not set. Skipping server-side save.");
-    // Frontend will fall back to local history. Indicate ok:false but no error.
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, reason: "no_database_url" }),
-    };
-  }
-
-  const client = new Client({ connectionString });
-
   try {
-    await client.connect();
-    const result = await client.query(
-      "INSERT INTO orders (payload) VALUES ($1) RETURNING id, created_at",
-      [order]
-    );
-    await client.end();
+    const store = getStore("order-history");
 
-    const row = result.rows[0];
+    // Load existing orders (if none, default to [])
+    const existing =
+      (await store.get("orders", { type: "json" })) || [];
+
+    const createdAt = new Date().toISOString();
+    const id = generateId();
+
+    const row = {
+      id,
+      created_at: createdAt,
+      payload: order,
+    };
+
+    // Newest first
+    existing.unshift(row);
+
+    // Persist back to blobs
+    await store.setJSON("orders", existing);
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ok: true,
-        id: row.id,
-        createdAt: row.created_at,
+        id,
+        createdAt,
       }),
     };
   } catch (e) {
-    console.error("Failed to save order to database", e);
-    try {
-      await client.end();
-    } catch (_) {}
+    console.error("Blobs save error", e);
     return { statusCode: 500, body: "Error saving order" };
   }
 };
