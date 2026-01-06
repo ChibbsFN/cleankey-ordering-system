@@ -1,22 +1,22 @@
 /* ---------- Design tokens ---------- */
 :root {
-  --bg-page: #0f172a;         /* deep navy */
-  --bg-page-soft: #020617;
-  --bg-panel: #020617;
-  --bg-panel-alt: #020617;
-  --accent: #22c55e;          /* green accent */
-  --accent-soft: rgba(34, 197, 94, 0.14);
-  --accent-strong: #16a34a;
+  --bg-page: #f3f6fb;        /* light, clean background */
+  --bg-page-soft: #e4edf7;
+  --bg-panel: #ffffff;
+  --bg-panel-alt: #f9fbff;
+  --accent: #00748c;         /* Siskon Siivous–style teal */
+  --accent-soft: rgba(0, 116, 140, 0.14);
+  --accent-strong: #00566a;
   --danger: #ef4444;
-  --text-main: #e5e7eb;
-  --text-muted: #9ca3af;
-  --text-subtle: #6b7280;
-  --border-subtle: rgba(148, 163, 184, 0.45);
-  --border-strong: rgba(148, 163, 184, 0.75);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --border-subtle: rgba(148, 163, 184, 0.35);
+  --border-strong: rgba(100, 116, 139, 0.9);
   --radius-lg: 1.1rem;
   --radius-full: 999px;
-  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.7);
-  --shadow-subtle: 0 10px 25px rgba(15, 23, 42, 0.5);
+  --shadow-soft: 0 22px 45px rgba(15, 23, 42, 0.12);
+  --shadow-subtle: 0 10px 25px rgba(15, 23, 42, 0.06);
 }
 
 /* ---------- Base layout ---------- */
@@ -34,10 +34,11 @@ body {
     sans-serif;
   color: var(--text-main);
   background:
-    radial-gradient(circle at top, #1e293b, var(--bg-page)) fixed,
-    linear-gradient(to bottom, var(--bg-page-soft), #000);
+    radial-gradient(circle at top, #ffffff, var(--bg-page)),
+    linear-gradient(to bottom, #ffffff, var(--bg-page-soft));
   min-height: 100vh;
 }
+
 
 body {
   display: flex;
@@ -56,14 +57,15 @@ main {
 
 /* ---------- Header / app shell ---------- */
 header {
-  background: rgba(15, 23, 42, 0.96);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
   backdrop-filter: blur(18px);
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
   position: sticky;
   top: 0;
   z-index: 20;
 }
+
 
 .header-inner {
   max-width: 1120px;
@@ -85,15 +87,16 @@ header {
   width: 34px;
   height: 34px;
   border-radius: 14px;
-  background: radial-gradient(circle at 20% 0%, var(--accent), #15803d);
+  background: radial-gradient(circle at 20% 0%, var(--accent), var(--accent-strong));
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 1rem;
-  color: #e5f9ed;
-  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.55);
+  color: #f9fafb;
+  box-shadow: 0 10px 25px rgba(0, 116, 140, 0.45);
 }
+
 
 .brand-text-main {
   font-weight: 600;
@@ -117,10 +120,11 @@ header {
 .chip {
   padding: 0.15rem 0.65rem;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(148, 163, 184, 0.08);
   color: var(--text-muted);
 }
+
 
 .dot {
   opacity: 0.5;
@@ -128,12 +132,9 @@ header {
 
 /* ---------- Panels ---------- */
 .panel {
-  background: linear-gradient(
-      135deg,
-      rgba(15, 23, 42, 0.98),
-      rgba(15, 23, 42, 0.98)
-    ),
-    radial-gradient(circle at top left, rgba(34, 197, 94, 0.05), transparent);
+  background:
+    radial-gradient(circle at top left, rgba(0, 116, 140, 0.06), transparent),
+    var(--bg-panel);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-subtle);
@@ -141,6 +142,7 @@ header {
   position: relative;
   overflow: hidden;
 }
+
 
 .panel::after {
   content: "";
@@ -218,7 +220,7 @@ textarea {
   padding: 0.45rem 0.55rem;
   border-radius: 0.55rem;
   border: 1px solid rgba(148, 163, 184, 0.55);
-  background: rgba(15, 23, 42, 0.85);
+  background: #ffffff;
   color: var(--text-main);
   font-size: 0.9rem;
   font-family: inherit;
@@ -226,6 +228,7 @@ textarea {
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     background 0.15s ease, transform 0.05s ease;
 }
+
 
 input::placeholder,
 textarea::placeholder {
@@ -254,7 +257,7 @@ textarea {
 button {
   border-radius: var(--radius-full);
   padding: 0.42rem 0.95rem;
-  border: 1px solid transparent;
+  border: 1px solid rgba(148, 163, 184, 0.4);
   font-size: 0.85rem;
   cursor: pointer;
   font-weight: 500;
@@ -262,33 +265,39 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  background: rgba(15, 23, 42, 0.9);
+  background: #ffffff;
   color: var(--text-main);
   transition: background 0.15s ease, border-color 0.15s ease,
     box-shadow 0.15s ease, transform 0.05s ease;
 }
 
+
 button.primary {
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: #ecfdf3;
-  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.55);
+  color: #f8fafc;
+  box-shadow: 0 10px 25px rgba(0, 116, 140, 0.45);
 }
 
+
 button.primary:hover {
-  background: linear-gradient(135deg, var(--accent-strong), #22c55e);
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
   transform: translateY(-1px);
 }
 
+
 button.secondary {
-  background: rgba(15, 23, 42, 0.85);
-  border-color: rgba(148, 163, 184, 0.6);
+  background: #ffffff;
+  border-color: var(--border-subtle);
   color: var(--text-muted);
 }
 
+
 button.secondary:hover {
   border-color: var(--accent);
-  color: #e5e7eb;
+  background: #f3f6fb;
+  color: var(--text-main);
 }
+
 
 button.danger {
   background: rgba(127, 29, 29, 0.9);
@@ -336,18 +345,21 @@ td {
 
 th {
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-subtle);
   border-bottom: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.95);
+  background: #f1f5f9;
 }
+
 
 tbody tr:nth-child(even) {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(148, 163, 184, 0.06);
 }
 
+
 tbody tr:hover {
-  background: rgba(22, 101, 52, 0.16);
+  background: rgba(0, 116, 140, 0.08);
 }
+
 
 td {
   border-bottom: 1px solid rgba(15, 23, 42, 0.9);
@@ -380,13 +392,11 @@ td {
 #admin-panel {
   border-style: dashed;
   border-color: rgba(148, 163, 184, 0.6);
-  background: radial-gradient(
-      circle at top left,
-      rgba(34, 197, 94, 0.06),
-      transparent
-    ),
-    rgba(15, 23, 42, 0.98);
+  background:
+    radial-gradient(circle at top left, rgba(0, 116, 140, 0.06), transparent),
+    var(--bg-panel-alt);
 }
+
 
 /* ---------- Responsive tweaks ---------- */
 @media (max-width: 640px) {

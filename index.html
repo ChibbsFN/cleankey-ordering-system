@@ -17,11 +17,6 @@
             <div class="brand-text-sub">Internal ordering &amp; approval system</div>
           </div>
         </div>
-        <div class="header-meta">
-          <span class="chip">GUI in English</span>
-          <span class="dot">•</span>
-          <span class="chip">PDF products in Finnish</span>
-        </div>
       </div>
     </header>
 
@@ -115,16 +110,11 @@
             </button>
           </div>
         </div>
-        <p style="font-size:0.8rem;color:#555;margin-top:0.4rem;">
-          Website is fully in English. The generated PDF uses Finnish product
-          descriptions so your supervisor can review it easily. Each order is
-          stored locally in your browser as history.
-        </p>
       </section>
 
       <section class="panel" id="history-panel">
         <div class="flex">
-          <h2><span class="step-pill">4</span> Order history (this browser)</h2>
+          <h2><span class="step-pill">4</span> Order history</h2>
           <div class="flex" style="gap:0.3rem;">
             <button type="button" class="secondary" id="history-refresh-btn">
               Refresh
@@ -137,10 +127,7 @@
             </button>
           </div>
         </div>
-        <p class="help">
-          Orders are saved in this browser only (using localStorage).
-          Use "Export all as PDF" to generate a summary for backup or sharing.
-        </p>
+        <p class="help">Orders are stored securely and shown here for quick reference.</p>
         <div id="history-table-wrapper" class="history-table-wrapper"></div>
       </section>
 
@@ -165,9 +152,7 @@
               Unlock admin
             </button>
           </div>
-          <p class="help">
-            Only people who know the password can add products and download an updated products.json file.
-          </p>
+          <p class="help">Admin users can add products and download an updated product file.</p>
         </div>
 
         <div id="admin-content" style="display:none;margin-top:0.5rem;">
@@ -201,10 +186,7 @@
               Download updated products.json
             </button>
           </div>
-          <p class="help">
-            After you add products, click <strong>Download updated products.json</strong> and upload it
-            to the same folder as index.html on your web host to make the changes permanent.
-          </p>
+          <p class="help">After updating products, download the new products.json and upload it with the site files.</p>
           <p id="admin-status" class="help"></p>
         </div>
       </section>
