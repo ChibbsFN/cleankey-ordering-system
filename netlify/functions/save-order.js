@@ -1,7 +1,7 @@
 // Netlify Function: save-order (Netlify Blobs version)
 // Stores each order in a Netlify Blobs store called "order-history".
 // The data model is a single JSON array under key "orders".
-const { getStore } = require("@netlify/blobs");
+const { getStore, connectLambda } = require("@netlify/blobs");
 const crypto = require("crypto");
 
 function generateId() {
@@ -12,6 +12,8 @@ function generateId() {
 }
 
 exports.handler = async (event) => {
+  // Initialize Netlify Blobs environment for Lambda compatibility
+  connectLambda(event);
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }

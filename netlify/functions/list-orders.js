@@ -1,8 +1,10 @@
 // Netlify Function: list-orders (Netlify Blobs version)
 // Reads the order list from the Netlify Blobs store "order-history".
-const { getStore } = require("@netlify/blobs");
+const { getStore, connectLambda } = require("@netlify/blobs");
 
 exports.handler = async (event) => {
+  // Initialize Netlify Blobs environment for Lambda compatibility
+  connectLambda(event);
   if (event.httpMethod !== "GET") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
