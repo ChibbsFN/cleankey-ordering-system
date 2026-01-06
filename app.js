@@ -9,6 +9,77 @@
 
 const ADMIN_PASSWORD = "cleankey-admin"; // <- change this to whatever you want
 const HISTORY_STORAGE_KEY = "cleankey_order_history_v1";
+// Optional server-side history (Netlify Functions + database)
+//
+// HISTORY_API_BASE points to Netlify Functions. If they are not configured,
+// the app will gracefully fall back to browser localStorage.
+const HISTORY_API_BASE = "/.netlify/functions";
+
+// Try to save a single order to the server. This is best-effort only.
+// Returns server metadata (e.g. id, createdAt) or null if not available.
+async function saveOrderToServer(order) {
+  try {
+    const res = await fetch(`${HISTORY_API_BASE}/save-order`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    });
+    if (!res.ok) {
+      console.warn("History API save-order HTTP " + res.status);
+      return null;
+    }
+    const data = await res.json();
+    if (data && data.ok) {
+      return data;
+    }
+  } catch (err) {
+    console.warn("Failed to save order on server", err);
+  }
+  return null;
+}
+
+// Try to load history from the server. Returns true on success, false on failure.
+// Expects an API response of the form:
+// { ok: true, orders: [ { id, created_at, payload: {...} }, ... ] }
+async function loadHistoryFromServer() {
+  try {
+    const res = await fetch(`${HISTORY_API_BASE}/list-orders`);
+    if (!res.ok) {
+      // 404/500/other -> server history not available, fall back to localStorage
+      console.warn("History API list-orders HTTP " + res.status);
+      return false;
+    }
+    const data = await res.json();
+    if (!data || !data.ok || !Array.isArray(data.orders)) {
+      console.warn("Unexpected server history payload", data);
+      return false;
+    }
+
+    orderHistory = data.orders.map((row) => {
+      const payload = row.payload || row.order || {};
+      const ts =
+        payload.timestamp || row.created_at || new Date().toISOString();
+      const total =
+        typeof payload.total === "number" ? payload.total : null;
+
+      return {
+        id: row.id,
+        timestamp: ts,
+        customerName: payload.customerName || "",
+        supervisorName: payload.supervisorName || "",
+        note: payload.note || "",
+        items: Array.isArray(payload.items) ? payload.items : [],
+        total,
+      };
+    });
+
+    return true;
+  } catch (err) {
+    console.warn("Failed to load history from server", err);
+    return false;
+  }
+}
+
 
 let products = [];
 let filteredProducts = [];
@@ -201,23 +272,40 @@ function renderOrderItemsTable() {
 }
 
 // ---- History helpers ----
-function loadHistory() {
+// Load history, preferring server-side storage when available.
+async function loadHistory() {
+  // First try server API (Netlify Function). If it fails, fall back to localStorage.
+  const loadedFromServer = await loadHistoryFromServer();
+  if (loadedFromServer) {
+    renderHistory();
+    // Mirror into localStorage as a backup so offline refresh still works.
+    try {
+      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(orderHistory));
+    } catch (e) {
+      console.warn("Failed to mirror server history into localStorage", e);
+    }
+    return;
+  }
+
+  // Fallback: original localStorage-based history.
   try {
     const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
     if (!raw) {
       orderHistory = [];
-      return;
-    }
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      orderHistory = parsed;
     } else {
-      orderHistory = [];
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        orderHistory = parsed;
+      } else {
+        orderHistory = [];
+      }
     }
   } catch (e) {
     console.error("Failed to load history", e);
     orderHistory = [];
   }
+
+  renderHistory();
 }
 
 function saveHistory() {
@@ -231,6 +319,8 @@ function saveHistory() {
 function addOrderToHistory(order) {
   orderHistory.push(order);
   saveHistory();
+  // Attempt to persist to server as well (best-effort; UI still works if this fails).
+  saveOrderToServer(order);
   renderHistory();
   showToast("Order saved to history ✅");
 }
@@ -701,7 +791,6 @@ adminDownloadBtn.addEventListener("click", downloadProductsJson);
 const historyRefreshBtn = qs("#history-refresh-btn");
 historyRefreshBtn.addEventListener("click", () => {
   loadHistory();
-  renderHistory();
 });
 
 const historyClearBtn = qs("#history-clear-btn");
@@ -714,4 +803,3 @@ historyExportAllBtn.addEventListener("click", exportAllHistoryPdf);
 loadProducts();
 renderOrderItemsTable();
 loadHistory();
-renderHistory();
