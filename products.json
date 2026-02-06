@@ -268,6 +268,46 @@
     "sku": "510NP",
     "nameEn": "Dishwashing brush 510N, red",
     "nameFi": "Astianpesuharja 510N, punainen",
+    "category": "Accessory",
+    "price": 0
+  },
+  {
+    "id": 35,
+    "sku": "LKOUK",
+    "nameEn": "Floor drain hook short",
+    "nameFi": "Lattiakaivokoukku lyhyt",
+    "category": "Accessories",
+    "price": 0
+  },
+  {
+    "id": 36,
+    "sku": "MSD114",
+    "nameEn": "Duotex Adjustment arm 0.5-0.8m blue",
+    "nameFi": "Duotex Säätövarsi 0,5-0,8m sininen",
+    "category": "Accessories",
+    "price": 0
+  },
+  {
+    "id": 37,
+    "sku": "LKOUK75",
+    "nameEn": "Floor drain hook 75cm",
+    "nameFi": "Lattiakaivokoukku 75cm",
+    "category": "Accessories",
+    "price": 0
+  },
+  {
+    "id": 38,
+    "sku": "8583",
+    "nameEn": "Measuring jug 1L, 20-1000ml scale",
+    "nameFi": "Mittakannu 1L, 20-1000ml asteikolla",
+    "category": "Accessories",
+    "price": 0
+  },
+  {
+    "id": 39,
+    "sku": "7000062913",
+    "nameEn": "3M Safety glass Visitor PC clear",
+    "nameFi": "3M Suojalasi Visitor PC kirkas",
     "category": "Accessories",
     "price": 0
   }
