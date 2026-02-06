@@ -262,5 +262,13 @@
     "nameFi": "Kiilto Pro Vieno Evo hajusteeton 2x1,5L",
     "category": "Chemicals",
     "price": 0
+  },
+  {
+    "id": 34,
+    "sku": "510NP",
+    "nameEn": "Dishwashing brush 510N, red",
+    "nameFi": "Astianpesuharja 510N, punainen",
+    "category": "Accessory",
+    "price": 0
   }
 ]
