@@ -318,5 +318,13 @@
     "nameFi": "Kiilto Pro Easydes Spray 750ml",
     "category": "Chemical",
     "price": 0
+  },
+  {
+    "id": 41,
+    "sku": "344LT",
+    "nameEn": "Toilet brush long, with cup and edge cleaner",
+    "nameFi": "WC-harja pitkä, kupilla ja reunapuhdistajalla",
+    "category": "Washroom",
+    "price": 0
   }
 ]
