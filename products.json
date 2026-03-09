@@ -310,5 +310,13 @@
     "nameFi": "3M Suojalasi Visitor PC kirkas",
     "category": "Accessories",
     "price": 0
+  },
+  {
+    "id": 40,
+    "sku": "8183",
+    "nameEn": "Kiilto Pro Easydes Spray 750ml",
+    "nameFi": "Kiilto Pro Easydes Spray 750ml",
+    "category": "Chemical",
+    "price": 0
   }
 ]
