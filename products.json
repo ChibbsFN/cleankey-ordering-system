@@ -326,5 +326,13 @@
     "nameFi": "WC-harja pitkä, kupilla ja reunapuhdistajalla",
     "category": "Washroom",
     "price": 0
+  },
+  {
+    "id": 42,
+    "sku": "63275",
+    "nameEn": "Kiilto Pro Textile Wash 8kg",
+    "nameFi": "Kiilto Pro Textile Wash 8kg",
+    "category": "Chemicals",
+    "price": 0
   }
 ]
