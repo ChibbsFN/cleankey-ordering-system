@@ -334,5 +334,13 @@
     "nameFi": "Kiilto Pro Textile Wash 8kg",
     "category": "Chemicals",
     "price": 0
+  },
+  {
+    "id": 43,
+    "sku": "T7005.001",
+    "nameEn": "Kiilto Pro Window 1L",
+    "nameFi": "Kiilto Pro Window 1L",
+    "category": "Chemicals",
+    "price": 0
   }
 ]
