@@ -4,10 +4,11 @@
 // - Order history stored in browser localStorage
 // - Admin module with password gate to add products and download products.json
 //
-// NOTE: Password check is client-side only; good enough for internal use,
-// but not strong security for the public internet.
+// Security: secrets are never stored in this file. The admin password is
+// checked by the verify-admin function (ADMIN_PASSWORD env var) and the
+// order history functions require the team access code (APP_ACCESS_CODE).
 
-const ADMIN_PASSWORD = "cleankey-admin"; // <- change this to whatever you want
+const ACCESS_CODE_STORAGE_KEY = "cleankey_access_code_v1";
 const HISTORY_STORAGE_KEY = "cleankey_order_history_v1";
 // Optional server-side history (Netlify Functions + database)
 //
@@ -15,11 +16,58 @@ const HISTORY_STORAGE_KEY = "cleankey_order_history_v1";
 // the app will gracefully fall back to browser localStorage.
 const HISTORY_API_BASE = "/.netlify/functions";
 
+// Escape text before putting it into innerHTML (prevents script injection).
+function escapeHtml(value) {
+  return String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function getAccessCode() {
+  try {
+    return localStorage.getItem(ACCESS_CODE_STORAGE_KEY) || "";
+  } catch (_e) {
+    return "";
+  }
+}
+
+// Ask for the team access code once and remember it in this browser.
+function askForAccessCode() {
+  const code = window.prompt("Enter the team access code to sync order history:");
+  if (!code) return "";
+  try {
+    localStorage.setItem(ACCESS_CODE_STORAGE_KEY, code.trim());
+  } catch (_e) {}
+  return code.trim();
+}
+
+// fetch() wrapper that sends the access code and asks for it again on 401.
+async function fetchWithAccess(url, options = {}) {
+  let code = getAccessCode() || askForAccessCode();
+  const send = (c) =>
+    fetch(url, {
+      ...options,
+      headers: { ...(options.headers || {}), "X-Access-Code": c },
+    });
+  let res = await send(code);
+  if (res.status === 401) {
+    try {
+      localStorage.removeItem(ACCESS_CODE_STORAGE_KEY);
+    } catch (_e) {}
+    code = askForAccessCode();
+    if (code) res = await send(code);
+  }
+  return res;
+}
+
 // Try to save a single order to the server. This is best-effort only.
 // Returns server metadata (e.g. id, createdAt) or null if not available.
 async function saveOrderToServer(order) {
   try {
-    const res = await fetch(`${HISTORY_API_BASE}/save-order`, {
+    const res = await fetchWithAccess(`${HISTORY_API_BASE}/save-order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order),
@@ -43,7 +91,7 @@ async function saveOrderToServer(order) {
 // { ok: true, orders: [ { id, created_at, payload: {...} }, ... ] }
 async function loadHistoryFromServer() {
   try {
-    const res = await fetch(`${HISTORY_API_BASE}/list-orders`);
+    const res = await fetchWithAccess(`${HISTORY_API_BASE}/list-orders`);
     if (!res.ok) {
       // 404/500/other -> server history not available, fall back to localStorage
       console.warn("History API list-orders HTTP " + res.status);
@@ -150,7 +198,8 @@ function populateCategoryFilter() {
 
   select.innerHTML =
     '<option value="">All categories</option>' +
-    categories.map((c) => `<option value="${c}">${c}</option>`).join("");
+    categories
+      .map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
 }
 
 // Apply search + category filters
@@ -195,13 +244,13 @@ function renderProductsSelect() {
     .map((p) => {
       const label = p.nameEn || "";
       return `<option
-           value="${p.id}"
-           data-sku="${p.sku}"
-           data-price="${p.price || 0}"
-           data-name-fi="${p.nameFi || ""}"
-           data-name-en="${p.nameEn || ""}"
+           value="${escapeHtml(p.id)}"
+           data-sku="${escapeHtml(p.sku)}"
+           data-price="${escapeHtml(p.price || 0)}"
+           data-name-fi="${escapeHtml(p.nameFi)}"
+           data-name-en="${escapeHtml(p.nameEn)}"
         >
-          ${p.sku} – ${label}
+          ${escapeHtml(p.sku)} – ${escapeHtml(label)}
         </option>`;
     })
     .join("");
@@ -224,9 +273,9 @@ function renderOrderItemsTable() {
       return `
         <tr>
           <td data-label="#">${idx + 1}</td>
-          <td data-label="SKU">${it.sku}</td>
-          <td data-label="Product (EN)">${nameDisplay}</td>
-          <td data-label="Qty">${it.quantity}</td>
+          <td data-label="SKU">${escapeHtml(it.sku)}</td>
+          <td data-label="Product (EN)">${escapeHtml(nameDisplay)}</td>
+          <td data-label="Qty">${escapeHtml(it.quantity)}</td>
           <td data-label="Unit price">${it.unitPrice.toFixed(2)} €</td>
           <td data-label="Line total">${(it.quantity * it.unitPrice).toFixed(
             2
@@ -347,13 +396,13 @@ function renderHistory() {
       return `
         <tr>
           <td data-label="#">${idx + 1}</td>
-          <td data-label="Date">${dateStr}</td>
-          <td data-label="Customer">${o.customerName || ""}</td>
-          <td data-label="Supervisor">${o.supervisorName || ""}</td>
+          <td data-label="Date">${escapeHtml(dateStr)}</td>
+          <td data-label="Customer">${escapeHtml(o.customerName)}</td>
+          <td data-label="Supervisor">${escapeHtml(o.supervisorName)}</td>
           <td data-label="Items">${itemCount}</td>
           <td data-label="Total">${total ? total + " €" : ""}</td>
           <td data-label="Actions">
-            <button class="secondary" data-history-id="${o.id}">PDF</button>
+            <button class="secondary" data-history-id="${escapeHtml(o.id)}">PDF</button>
           </td>
         </tr>
       `;
@@ -529,17 +578,28 @@ function exportAllHistoryPdf() {
 
 // ---- Admin helpers ----
 
-function unlockAdmin() {
+async function unlockAdmin() {
   const input = qs("#admin-password-input");
   const status = qs("#admin-status");
   if (!input) return;
-  const value = input.value;
-  if (value === ADMIN_PASSWORD) {
-    qs("#admin-locked").style.display = "none";
-    qs("#admin-content").style.display = "block";
-    status.textContent = "Admin unlocked.";
-  } else {
-    status.textContent = "Incorrect password.";
+  status.textContent = "Checking…";
+  try {
+    const res = await fetch(`${HISTORY_API_BASE}/verify-admin`, {
+      method: "POST",
+      headers: { "X-Admin-Password": input.value },
+    });
+    if (res.ok) {
+      input.value = "";
+      qs("#admin-locked").style.display = "none";
+      qs("#admin-content").style.display = "block";
+      status.textContent = "Admin unlocked.";
+    } else if (res.status === 503) {
+      status.textContent = "Admin password is not set up on the server yet.";
+    } else {
+      status.textContent = "Incorrect password.";
+    }
+  } catch (_e) {
+    status.textContent = "Could not reach the server.";
   }
 }
 
