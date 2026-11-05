@@ -1,6 +1,7 @@
 // Netlify Function: list-orders (Netlify Blobs version)
 // Reads the order list from the Netlify Blobs store "order-history".
 const { getStore, connectLambda } = require("@netlify/blobs");
+const { requireSecret } = require("../lib/auth");
 
 exports.handler = async (event) => {
   // Initialize Netlify Blobs environment for Lambda compatibility
@@ -8,6 +9,9 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "GET") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
+  // Orders contain customer names, so only the team may read them.
+  const denied = requireSecret(event, "APP_ACCESS_CODE", "x-access-code");
+  if (denied) return denied;
 
   try {
     const store = getStore("order-history");

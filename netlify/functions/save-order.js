@@ -3,6 +3,10 @@
 // The data model is a single JSON array under key "orders".
 const { getStore, connectLambda } = require("@netlify/blobs");
 const crypto = require("crypto");
+const { requireSecret } = require("../lib/auth");
+
+const MAX_BODY_BYTES = 50 * 1024; // generous for one order
+const MAX_ORDERS = 2000; // stop the store growing forever
 
 function generateId() {
   if (crypto.randomUUID) {
@@ -17,12 +21,20 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
+  const denied = requireSecret(event, "APP_ACCESS_CODE", "x-access-code");
+  if (denied) return denied;
+  if (Buffer.byteLength(event.body || "", "utf8") > MAX_BODY_BYTES) {
+    return { statusCode: 413, body: "Order too large" };
+  }
 
   let order;
   try {
     order = JSON.parse(event.body || "{}");
   } catch (_e) {
     return { statusCode: 400, body: "Invalid JSON" };
+  }
+  if (!order || typeof order !== "object" || Array.isArray(order)) {
+    return { statusCode: 400, body: "Invalid order" };
   }
 
   try {
@@ -43,6 +55,7 @@ exports.handler = async (event) => {
 
     // Newest first
     existing.unshift(row);
+    if (existing.length > MAX_ORDERS) existing.length = MAX_ORDERS;
 
     // Persist back to blobs
     await store.setJSON("orders", existing);
